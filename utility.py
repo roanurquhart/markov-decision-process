@@ -1,4 +1,3 @@
-
 states = {}
 actions = []
 
@@ -9,10 +8,10 @@ class State:
         self.avail_actions = {}
 
     def __repr__(self):
-        return "<State: %s>" % (self.name)
+        return "<State: %s>" % self.name
 
     def __str__(self):
-        return "State: %s" % (self.name)
+        return "State: %s" % self.name
 
 
 def parse_input(data):

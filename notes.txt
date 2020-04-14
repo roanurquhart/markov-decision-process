@@ -3,3 +3,10 @@ Reward Function R(s): probably 1 stroke
 Transition Function: defines a transition T where being in state S and taking an action ‘a’ takes us to state S’ - given in text file
     Probability Function: P(S'|s,a) - given in text file
 Utility Function = R(s) + max( discount*( (prob * each option) ...+... () ) )
+
+Model-Based
+    Keep track of how many times you arrive at state s' when taking action a from state s --> Transition Probability P(s'|s,a)
+    Keep track of reward function as well
+
+Model-Free
+    Estimate the utility - I think
