@@ -17,20 +17,22 @@ class State:
 
 def parse_input(data):
     counter = 0
+    state = State('init')
 
     while counter < len(data):
 
         temp = data[counter]
         segmented = temp.split('/')
-        state = State(segmented[0])
 
         if segmented[0] not in states:
+            state = State(segmented[0])
             states[segmented[0]] = state
 
         if segmented[1] not in state.avail_actions:
             # Nested dictionary - {Action: {newState: probability}}
             state.avail_actions[segmented[1]] = {}
-            state.avail_actions[segmented[1]][segmented[2]] = float(segmented[3].rstrip())
+
+        state.avail_actions[segmented[1]][segmented[2]] = float(segmented[3].rstrip())
 
         counter += 1
 

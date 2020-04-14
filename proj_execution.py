@@ -7,7 +7,7 @@ with open(sys.argv[1], "r") as input_file:
 utility.parse_input(input_data)
 print(utility.states)
 
-for state in utility.states.values:
-    for action in state.avail_actions:
-        print(action)
+for state in utility.states.values():
+    print(state)
+    print(state.avail_actions)
 
