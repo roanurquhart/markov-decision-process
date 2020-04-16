@@ -1,6 +1,6 @@
 states = {}
 actions = []
-rewards = {'Fairway': 1, 'Ravine': 2, 'Close': 1, 'Same': 1, 'Left': 1, 'Over': 1, 'In': 0}
+rewards = {'Fairway': 1, 'Ravine': 2, 'Close': 0, 'Same': 1, 'Left': 1, 'Over': 1, 'In': -1}
 
 
 class State:
