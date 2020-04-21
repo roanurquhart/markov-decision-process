@@ -1,6 +1,7 @@
 states = {}
 actions = []
-rewards = {'Fairway': 1, 'Ravine': 2, 'Close': 0, 'Same': 1, 'Left': 1, 'Over': 1, 'In': -1}
+based_rewards = {'Fairway': 1, 'Ravine': 1, 'Close': 1, 'Same': 1, 'Left': 1, 'Over': 1, 'In': 0}
+free_rewards = {'Fairway': 1, 'Ravine': 1, 'Close': 1, 'Same': 1, 'Left': 1, 'Over': 1, 'In': 0}
 
 
 class State:
@@ -42,3 +43,31 @@ def parse_input(data):
         counter += 1
 
     states['In'] = State('In')
+
+
+# Calculate utility values for a state's available actions and assign overall utility
+def calc_utility(state, discount, reward):
+    val = 0
+    min_util = 99999999999
+    # Available actions
+    for action in state.avail_actions:
+        # Possible outcome states of action
+        for ste in state.avail_actions[action]:
+            # Calculate weighted utility value for given state
+            val += state.transition_track[action][ste] * based_rewards[ste]
+        # Track utility of given action
+        state.reward_track[action] = (val * discount + reward)
+        # Store min utility value calculated as state's utility
+        # Low utility is a better move
+        if state.reward_track[action] < min_util:
+            based_rewards[state.name] = state.reward_track[action]
+            min_util = state.reward_track[action]
+
+
+def check_changes_based_rewards():
+    total = 0
+    for val in based_rewards.values():
+        total += val
+    return total / len(based_rewards.values())
+
+
