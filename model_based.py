@@ -9,6 +9,7 @@ def model_based_rl():
     discount = 0.9
     reward = 1
     explore = 0.2
+    # Create a copy of states dict for local use
     global model_based_states
     model_based_states = utility.set_up_local_states()
 
@@ -29,12 +30,6 @@ def model_based_rl():
             utility.calc_utility(state, discount, reward, explore)
             converged = utility.check_for_convergence(baseline, utility.based_rewards)
             baseline = dict(utility.based_rewards)
-
-        # # Determine Policy
-        # policy = utility.determine_policy(state)
-        # utility.print_stats(state)
-        # print('Recommended Policy', end=': ')
-        # print(policy)
 
 
 def sel_action_result(ste, action):
