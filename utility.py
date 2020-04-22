@@ -1,3 +1,6 @@
+import math
+import random
+
 states = {}
 actions = []
 based_rewards = {'Fairway': 1, 'Ravine': 1, 'Close': 1, 'Same': 1, 'Left': 1, 'Over': 1, 'In': 0}
@@ -42,32 +45,65 @@ def parse_input(data):
 
         counter += 1
 
-    states['In'] = State('In')
-
 
 # Calculate utility values for a state's available actions and assign overall utility
-def calc_utility(state, discount, reward):
+def calc_utility(state, discount, reward, explore_val):
     val = 0
     min_util = 99999999999
+    all_vals = []
     # Available actions
     for action in state.avail_actions:
+
         # Possible outcome states of action
         for ste in state.avail_actions[action]:
+
             # Calculate weighted utility value for given state
             val += state.transition_track[action][ste] * based_rewards[ste]
+
         # Track utility of given action
         state.reward_track[action] = (val * discount + reward)
+        all_vals.append((val * discount + reward))
+
         # Store min utility value calculated as state's utility
         # Low utility is a better move
         if state.reward_track[action] < min_util:
-            based_rewards[state.name] = state.reward_track[action]
             min_util = state.reward_track[action]
 
+    # Explore vs Exploit Step
+    # Given explore_val will determine the how often this happens
+    if random.random() < explore_val:
+        based_rewards[state.name] = random.sample(all_vals, 1)[0]
+    else:
+        based_rewards[state.name] = min_util
 
-def check_changes_based_rewards():
-    total = 0
-    for val in based_rewards.values():
-        total += val
-    return total / len(based_rewards.values())
+
+# Checks all actions and their associated utility values to determine policy
+def determine_policy(ste):
+    best_action = ''
+    comparator = 1000000000
+    for act in ste.reward_track:
+        if ste.reward_track[act] < comparator:
+            comparator = ste.reward_track[act]
+            best_action = act
+
+    return best_action
+
+
+# Returns True if utility values converge
+def check_for_convergence(baseline, new_baseline):
+    for ste in baseline:
+        if not math.isclose(baseline[ste], new_baseline[ste]):
+            return False
+    return True
+
+
+def print_stats(ste):
+    print(ste)
+    # print('Available Actions', end=': ')
+    # print(ste.avail_actions)
+    # print('Transition Probabilities', end=': ')
+    # print(ste.transition_track)
+    print('Rewards Proposition For Each Action', end=': ')
+    print(ste.reward_track)
 
 

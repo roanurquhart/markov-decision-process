@@ -6,9 +6,11 @@ import math
 def model_based_rl():
     discount = 0.9
     reward = 1
+    explore = 0.2
 
     for state in utility.states.values():
         counter = 0
+
         # Establish transition probabilities
         while counter < 1001:
             for action in state.avail_actions:
@@ -20,14 +22,14 @@ def model_based_rl():
         baseline = dict(utility.based_rewards)
         converged = False
         while not converged:
-            utility.calc_utility(state, discount, reward)
-            converged = check_for_convergence(baseline, utility.based_rewards)
+            utility.calc_utility(state, discount, reward, explore)
+            converged = utility.check_for_convergence(baseline, utility.based_rewards)
             baseline = dict(utility.based_rewards)
 
         # Determine Policy
-        policy = determine_policy(state)
+        policy = utility.determine_policy(state)
 
-        print_stats(state)
+        utility.print_stats(state)
         print('Recommended Policy', end=': ')
         print(policy)
 
@@ -51,30 +53,4 @@ def establish_transition_prob(ste, count):
             ste.transition_track[act][result] /= count
 
 
-def determine_policy(ste):
-    best_action = ''
-    comparator = 1000000000
-    for act in ste.reward_track:
-        if ste.reward_track[act] < comparator:
-            comparator = ste.reward_track[act]
-            best_action = act
 
-    return best_action
-
-
-# Returns True if converged
-def check_for_convergence(baseline, new_baseline):
-    for ste in baseline:
-        if not math.isclose(baseline[ste], new_baseline[ste]):
-            return False
-    return True
-
-
-def print_stats(ste):
-    print(ste)
-    # print('Available Actions', end=': ')
-    # print(ste.avail_actions)
-    # print('Transition Probabilities', end=': ')
-    # print(ste.transition_track)
-    print('Rewards Proposition For Each Action', end=': ')
-    print(ste.reward_track)

@@ -10,3 +10,12 @@ Model-Based
 
 Model-Free
     Estimate the utility - I think
+
+
+As you make the discount value closer to 1 - Each utility value for the policy becomes more and more skewed
+    There is a more noticeable difference between the utility of each state causing the policy to be consistently the same
+
+As you make the discount value closer to 0 - The difference between each utility value decreases
+    Since the values are closer to each other, the policy is more likely to change
+
+I decided to stop learning when the utility values reach convergence
