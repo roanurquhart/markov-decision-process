@@ -1,14 +1,18 @@
 import utility
 import random
-import math
+
+
+model_based_states = {}
 
 
 def model_based_rl():
     discount = 0.9
     reward = 1
     explore = 0.2
+    global model_based_states
+    model_based_states = utility.set_up_local_states()
 
-    for state in utility.states.values():
+    for state in model_based_states.values():
         counter = 0
 
         # Establish transition probabilities
@@ -26,12 +30,11 @@ def model_based_rl():
             converged = utility.check_for_convergence(baseline, utility.based_rewards)
             baseline = dict(utility.based_rewards)
 
-        # Determine Policy
-        policy = utility.determine_policy(state)
-
-        utility.print_stats(state)
-        print('Recommended Policy', end=': ')
-        print(policy)
+        # # Determine Policy
+        # policy = utility.determine_policy(state)
+        # utility.print_stats(state)
+        # print('Recommended Policy', end=': ')
+        # print(policy)
 
 
 def sel_action_result(ste, action):
@@ -51,6 +54,8 @@ def establish_transition_prob(ste, count):
         for result in ste.avail_actions[act]:
             # Need to be a float
             ste.transition_track[act][result] /= count
+
+
 
 
 

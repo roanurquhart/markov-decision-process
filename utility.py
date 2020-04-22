@@ -1,5 +1,7 @@
 import math
 import random
+import model_free
+import model_based
 
 states = {}
 actions = []
@@ -42,6 +44,40 @@ def parse_input(data):
 
         state.avail_actions[segmented[1]][segmented[2]] = float(segmented[3].rstrip())
         state.transition_track[segmented[1]][segmented[2]] = 0
+
+        counter += 1
+
+
+def print_solution(data):
+    counter = 0
+    # for state in states.values():
+    #     print_stats(state)
+
+    while counter < len(data):
+
+        temp = data[counter]
+        segmented = temp.split('/')
+
+        m_based_state = model_based.model_based_states[segmented[0]]
+        m_based_trans = m_based_state.transition_track[segmented[1]][segmented[2]]
+
+        m_free_state = model_free.model_free_states[segmented[0]]
+        m_free_utility = m_free_state.reward_track[segmented[1]]
+
+        print(temp)
+        print('Model Based', end=': ')
+        print('Transition Probability: ' + str(m_based_trans), end=', ')
+        if not segmented[2] == 'In':
+            print('Recommended Policy: ' + determine_policy(model_based.model_based_states[segmented[2]]))
+        else:
+            print('Recommended Policy: ' + 'You have successfully completed the hole')
+        print('Model Free', end=': ')
+        print('Utility Value: ' + str(m_free_utility), end=', ')
+        if not segmented[2] == 'In':
+            print('Recommended Policy: ' + determine_policy(model_free.model_free_states[segmented[2]]))
+        else:
+            print('Recommended Policy: ' + 'You have successfully completed the hole')
+        print('')
 
         counter += 1
 
@@ -99,11 +135,15 @@ def check_for_convergence(baseline, new_baseline):
 
 def print_stats(ste):
     print(ste)
-    # print('Available Actions', end=': ')
-    # print(ste.avail_actions)
-    # print('Transition Probabilities', end=': ')
-    # print(ste.transition_track)
+    print('Available Actions', end=': ')
+    print(ste.avail_actions)
+    print('Transition Probabilities', end=': ')
+    print(ste.transition_track)
     print('Rewards Proposition For Each Action', end=': ')
     print(ste.reward_track)
+
+
+def set_up_local_states():
+    return dict(states)
 
 

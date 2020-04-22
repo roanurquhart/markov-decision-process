@@ -19,3 +19,6 @@ As you make the discount value closer to 0 - The difference between each utility
     Since the values are closer to each other, the policy is more likely to change
 
 I decided to stop learning when the utility values reach convergence
+
+With a higher exploration value, the utility values will be more varied each time learning is done
+    Whereas with a smaller exploration value there will not be much variation

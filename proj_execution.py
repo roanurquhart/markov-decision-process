@@ -9,5 +9,5 @@ with open(sys.argv[1], "r") as input_file:
 utility.parse_input(input_data)
 model_based.model_based_rl()
 model_free.model_free_rl()
-
+utility.print_solution(input_data)
 
